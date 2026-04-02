@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Voy</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-1: #05010d;
+      --bg-2: #120321;
+      --purple-1: #7b2cff;
+      --purple-2: #b56cff;
+      --purple-3: #e0b3ff;
+      --glow: rgba(160, 76, 255, 0.8);
+      --soft: rgba(181, 108, 255, 0.18);
+    }
+
+    body {
+      min-height: 100vh;
+      overflow: hidden;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(90, 0, 170, 0.18), transparent 25%),
+        radial-gradient(circle at 20% 20%, rgba(125, 0, 255, 0.12), transparent 20%),
+        radial-gradient(circle at 80% 30%, rgba(168, 96, 255, 0.12), transparent 20%),
+        linear-gradient(180deg, var(--bg-2), var(--bg-1));
+      color: white;
+    }
+
+    .universe {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .stars,
+    .particles,
+    .rays {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .stars::before,
+    .stars::after {
+      content: "";
+      position: absolute;
+      inset: -20%;
+      background-image:
+        radial-gradient(2px 2px at 15% 20%, rgba(255,255,255,0.9), transparent 70%),
+        radial-gradient(1.5px 1.5px at 70% 30%, rgba(214,170,255,0.9), transparent 70%),
+        radial-gradient(2px 2px at 30% 70%, rgba(255,255,255,0.8), transparent 70%),
+        radial-gradient(1.5px 1.5px at 80% 80%, rgba(196,129,255,0.8), transparent 70%),
+        radial-gradient(1.8px 1.8px at 45% 40%, rgba(255,255,255,0.8), transparent 70%),
+        radial-gradient(1.5px 1.5px at 58% 60%, rgba(197,133,255,0.9), transparent 70%),
+        radial-gradient(1.8px 1.8px at 90% 15%, rgba(255,255,255,0.85), transparent 70%),
+        radial-gradient(1.5px 1.5px at 10% 85%, rgba(204,153,255,0.8), transparent 70%);
+      animation: drift 40s linear infinite;
+      opacity: 0.95;
+    }
+
+    .stars::after {
+      transform: scale(1.2) rotate(8deg);
+      filter: blur(0.5px);
+      opacity: 0.45;
+      animation-duration: 65s;
+    }
+
+    .centerpiece {
+      position: relative;
+      width: min(85vw, 650px);
+      aspect-ratio: 1 / 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .accretion-ring,
+    .accretion-ring::before,
+    .accretion-ring::after {
+      position: absolute;
+      border-radius: 50%;
+    }
+
+    .accretion-ring {
+      width: 78%;
+      height: 78%;
+      background:
+        radial-gradient(circle, transparent 42%, rgba(159, 73, 255, 0.22) 52%, rgba(204, 151, 255, 0.5) 60%, transparent 72%),
+        conic-gradient(from 0deg, transparent 0deg, rgba(190, 116, 255, 0.85) 70deg, transparent 130deg, rgba(120, 42, 255, 0.9) 220deg, transparent 280deg, rgba(225, 180, 255, 0.85) 340deg, transparent 360deg);
+      filter: blur(2px) drop-shadow(0 0 28px rgba(162, 73, 255, 0.8));
+      animation: spin 12s linear infinite;
+      opacity: 0.9;
+    }
+
+    .accretion-ring::before {
+      content: "";
+      inset: 10%;
+      border: 1px solid rgba(216, 172, 255, 0.5);
+      filter: blur(0.5px);
+      animation: pulse 3s ease-in-out infinite;
+    }
+
+    .accretion-ring::after {
+      content: "";
+      inset: -6%;
+      border: 2px solid rgba(148, 68, 255, 0.16);
+      filter: blur(4px);
+    }
+
+    .black-hole {
+      position: absolute;
+      width: 38%;
+      height: 38%;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 50% 45%, #09020f 10%, #000 55%, #000 70%);
+      box-shadow:
+        0 0 0 10px rgba(125, 44, 255, 0.06),
+        0 0 45px rgba(0, 0, 0, 1),
+        0 0 80px rgba(167, 82, 255, 0.2),
+        inset 0 0 30px rgba(255, 255, 255, 0.03);
+      z-index: 3;
+      animation: breathe 4s ease-in-out infinite;
+    }
+
+    .black-hole::before {
+      content: "";
+      position: absolute;
+      inset: -16%;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(177, 93, 255, 0.25), transparent 60%);
+      filter: blur(18px);
+      z-index: -1;
+    }
+
+    .message {
+      position: absolute;
+      z-index: 5;
+      text-align: center;
+      opacity: 0;
+      transform: scale(0.8);
+      transition: opacity 1s ease, transform 1s ease;
+      pointer-events: none;
+      width: 90%;
+    }
+
+    .message h1 {
+      font-size: clamp(1.8rem, 4vw, 3.8rem);
+      letter-spacing: 0.25em;
+      color: #f3ddff;
+      text-shadow:
+        0 0 10px rgba(214, 154, 255, 0.8),
+        0 0 25px rgba(158, 68, 255, 0.8),
+        0 0 50px rgba(127, 39, 255, 0.7);
+      line-height: 1.4;
+      word-break: break-word;
+    }
+
+    .message p {
+      margin-top: 12px;
+      font-size: clamp(0.85rem, 1.6vw, 1rem);
+      color: rgba(234, 205, 255, 0.72);
+      letter-spacing: 0.18em;
+    }
+
+    .controls {
+      position: absolute;
+      bottom: 8vh;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 20;
+    }
+
+    .voy-btn {
+      border: 1px solid rgba(212, 166, 255, 0.35);
+      background: rgba(92, 24, 161, 0.18);
+      color: white;
+      padding: 16px 30px;
+      border-radius: 999px;
+      font-size: 1rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      cursor: pointer;
+      backdrop-filter: blur(12px);
+      box-shadow:
+        0 0 20px rgba(131, 40, 250, 0.25),
+        inset 0 0 20px rgba(203, 151, 255, 0.05);
+      transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+    }
+
+    .voy-btn:hover {
+      transform: translateY(-2px) scale(1.03);
+      box-shadow:
+        0 0 28px rgba(170, 86, 255, 0.45),
+        0 0 60px rgba(126, 31, 251, 0.28);
+      background: rgba(122, 40, 214, 0.28);
+    }
+
+    .voy-btn:active {
+      transform: scale(0.98);
+    }
+
+    .light-burst {
+      position: absolute;
+      inset: 50%;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,0.95), rgba(195,120,255,0.75), transparent 70%);
+      filter: blur(1px);
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.2);
+      pointer-events: none;
+    }
+
+    .active .message {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .active .accretion-ring {
+      animation-duration: 4s;
+      filter: blur(2px) drop-shadow(0 0 35px rgba(192, 114, 255, 0.95));
+    }
+
+    .active .black-hole {
+      box-shadow:
+        0 0 0 14px rgba(147, 61, 255, 0.08),
+        0 0 55px rgba(0, 0, 0, 1),
+        0 0 120px rgba(168, 92, 255, 0.36),
+        inset 0 0 40px rgba(255, 255, 255, 0.06);
+    }
+
+    .active .rays::before,
+    .active .rays::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 120vmax;
+      height: 120vmax;
+      transform: translate(-50%, -50%);
+      background:
+        conic-gradient(from 0deg,
+          transparent 0deg,
+          rgba(170, 90, 255, 0.22) 25deg,
+          transparent 55deg,
+          rgba(229, 177, 255, 0.16) 78deg,
+          transparent 110deg,
+          rgba(142, 39, 255, 0.24) 145deg,
+          transparent 180deg,
+          rgba(211, 156, 255, 0.18) 220deg,
+          transparent 250deg,
+          rgba(123, 44, 255, 0.2) 290deg,
+          transparent 330deg,
+          rgba(219, 185, 255, 0.18) 355deg,
+          transparent 360deg);
+      border-radius: 50%;
+      filter: blur(26px);
+      animation: spin 10s linear infinite;
+      opacity: 0.9;
+    }
+
+    .active .rays::after {
+      width: 90vmax;
+      height: 90vmax;
+      animation-direction: reverse;
+      animation-duration: 6s;
+      filter: blur(40px);
+      opacity: 0.55;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes drift {
+      from { transform: translateY(0) translateX(0); }
+      50% { transform: translateY(2%) translateX(-1%); }
+      to { transform: translateY(0) translateX(0); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 0.55; }
+      50% { transform: scale(1.04); opacity: 1; }
+    }
+
+    @keyframes breathe {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    .particle {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: var(--size);
+      height: var(--size);
+      margin-left: calc(var(--size) / -2);
+      margin-top: calc(var(--size) / -2);
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,0.95), rgba(198,130,255,0.8) 40%, rgba(126,46,255,0.2) 70%, transparent 80%);
+      box-shadow: 0 0 18px rgba(188, 116, 255, 0.65);
+      opacity: 0;
+      transform: rotate(var(--angle)) translateX(0px) scale(0.2);
+      animation: orbitBurst var(--duration) ease-out forwards;
+      animation-delay: var(--delay);
+    }
+
+    @keyframes orbitBurst {
+      0% {
+        opacity: 0;
+        transform: rotate(var(--angle)) translateX(0px) scale(0.2);
+      }
+      10% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+        transform: rotate(var(--angle)) translateX(var(--distance)) scale(1.3);
+      }
+    }
+
+    .flash {
+      animation: flash 1.2s ease-out forwards;
+    }
+
+    @keyframes flash {
+      0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.2);
+      }
+      15% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(28);
+      }
+    }
+
+    @media (max-width: 700px) {
+      .centerpiece {
+        width: 95vw;
+      }
+
+      .voy-btn {
+        padding: 14px 22px;
+        font-size: 0.9rem;
+      }
+
+      .message h1 {
+        letter-spacing: 0.12em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="universe" id="universe">
+    <div class="stars"></div>
+    <div class="rays"></div>
+    <div class="particles" id="particles"></div>
+
+    <div class="centerpiece">
+      <div class="accretion-ring"></div>
+      <div class="black-hole"></div>
+      <div class="message" id="message">
+        <h1>⏁⟒ ⏃⋔⍜ ⎎⟟⌰⊑⏃</h1>
+      </div>
+    </div>
+
+    <div class="light-burst" id="burst"></div>
+
+    <div class="controls">
+      <button class="voy-btn" id="voyBtn">voy clica aqui</button>
+    </div>
+  </div>
+
+  <script>
+    const universe = document.getElementById('universe');
+    const button = document.getElementById('voyBtn');
+    const particles = document.getElementById('particles');
+    const burst = document.getElementById('burst');
+
+    function createParticles(amount = 65) {
+      particles.innerHTML = '';
+
+      for (let i = 0; i < amount; i++) {
+        const p = document.createElement('span');
+        p.className = 'particle';
+
+        const angle = Math.random() * 360 + 'deg';
+        const distance = 130 + Math.random() * 420 + 'px';
+        const size = (2 + Math.random() * 8).toFixed(2) + 'px';
+        const duration = (1.8 + Math.random() * 2.6).toFixed(2) + 's';
+        const delay = (Math.random() * 0.8).toFixed(2) + 's';
+
+        p.style.setProperty('--angle', angle);
+        p.style.setProperty('--distance', distance);
+        p.style.setProperty('--size', size);
+        p.style.setProperty('--duration', duration);
+        p.style.setProperty('--delay', delay);
+
+        particles.appendChild(p);
+      }
+    }
+
+    function triggerEffect() {
+      universe.classList.remove('active');
+      burst.classList.remove('flash');
+      void universe.offsetWidth;
+
+      createParticles(85);
+      universe.classList.add('active');
+      burst.classList.add('flash');
+
+      button.textContent = 'mais luz para a voy';
+    }
+
+    button.addEventListener('click', triggerEffect);
+  </script>
+</body>
+</html>
