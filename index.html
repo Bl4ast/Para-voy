@@ -157,7 +157,7 @@
 
     .message h1 {
       font-size: clamp(1.8rem, 4vw, 3.8rem);
-      letter-spacing: 0.25em;
+      letter-spacing: 0.12em;
       color: #f3ddff;
       text-shadow:
         0 0 10px rgba(214, 154, 255, 0.8),
@@ -165,13 +165,7 @@
         0 0 50px rgba(127, 39, 255, 0.7);
       line-height: 1.4;
       word-break: break-word;
-    }
-
-    .message p {
-      margin-top: 12px;
-      font-size: clamp(0.85rem, 1.6vw, 1rem);
-      color: rgba(234, 205, 255, 0.72);
-      letter-spacing: 0.18em;
+      text-transform: lowercase;
     }
 
     .controls {
@@ -180,6 +174,11 @@
       left: 50%;
       transform: translateX(-50%);
       z-index: 20;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+      width: min(92vw, 800px);
     }
 
     .voy-btn {
@@ -351,6 +350,230 @@
       }
     }
 
+    /* GALERIA */
+    .gallery-overlay {
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(circle at center, rgba(123, 44, 255, 0.18), rgba(5, 1, 13, 0.94) 60%),
+        linear-gradient(180deg, rgba(18, 3, 33, 0.9), rgba(5, 1, 13, 0.98));
+      backdrop-filter: blur(12px);
+      z-index: 50;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.6s ease;
+    }
+
+    .gallery-overlay.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .gallery-bg {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+
+    .gallery-bg img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transform: scale(1.12);
+      filter: blur(22px) brightness(0.35) saturate(1.2);
+      transition: opacity 1s ease, transform 6s ease;
+    }
+
+    .gallery-bg img.active {
+      opacity: 1;
+      transform: scale(1.2);
+    }
+
+    .gallery-box {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: min(92vw, 900px);
+      height: min(80vh, 620px);
+      border-radius: 30px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.06);
+      box-shadow: 0 20px 80px rgba(0,0,0,0.45), 0 0 60px rgba(171, 86, 255, 0.18);
+      overflow: hidden;
+      backdrop-filter: blur(18px);
+    }
+
+    .gallery-top {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 6;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 20px;
+    }
+
+    .gallery-label {
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      font-size: 0.85rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .close-btn,
+    .nav-btn {
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.08);
+      color: white;
+      cursor: pointer;
+      transition: 0.25s ease;
+      backdrop-filter: blur(8px);
+    }
+
+    .close-btn {
+      padding: 10px 16px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 0.8rem;
+    }
+
+    .close-btn:hover,
+    .nav-btn:hover {
+      background: rgba(181, 108, 255, 0.18);
+      box-shadow: 0 0 24px rgba(190, 110, 255, 0.3);
+      transform: scale(1.05);
+    }
+
+    .slides {
+      position: absolute;
+      inset: 0;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 34px;
+      opacity: 0;
+      transform: scale(0.94) rotate(-1deg);
+      transition: opacity 0.9s ease, transform 0.9s ease;
+    }
+
+    .slide.active {
+      opacity: 1;
+      transform: scale(1) rotate(0deg);
+    }
+
+    .photo-frame {
+      position: relative;
+      width: min(88%, 760px);
+      height: min(76%, 470px);
+      border-radius: 28px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.16);
+      box-shadow: 0 0 40px rgba(195, 114, 255, 0.18);
+      background: rgba(255,255,255,0.04);
+    }
+
+    .photo-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scale(1.04);
+      transition: transform 5s ease;
+    }
+
+    .slide.active .photo-frame img {
+      transform: scale(1.12);
+    }
+
+    .photo-frame::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(255,255,255,0.05), transparent 28%, transparent 60%, rgba(5,1,13,0.45));
+      pointer-events: none;
+    }
+
+    .caption {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 26px;
+      background: linear-gradient(180deg, transparent, rgba(8,0,16,0.25), rgba(8,0,16,0.85));
+      text-align: center;
+    }
+
+    .caption h2 {
+      font-size: clamp(1.4rem, 2.8vw, 2.3rem);
+      color: #f7e6ff;
+      margin-bottom: 8px;
+      text-shadow: 0 0 16px rgba(213, 153, 255, 0.65);
+    }
+
+    .caption p {
+      font-size: clamp(0.9rem, 1.5vw, 1rem);
+      color: rgba(244, 225, 255, 0.84);
+    }
+
+    .nav-wrap {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 18px;
+      z-index: 7;
+      pointer-events: none;
+    }
+
+    .nav-btn {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      font-size: 1.4rem;
+      pointer-events: auto;
+    }
+
+    .dots {
+      position: absolute;
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      z-index: 7;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.26);
+      border: 1px solid rgba(255,255,255,0.18);
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .dot.active {
+      width: 28px;
+      background: linear-gradient(90deg, #c584ff, #f2b6ff);
+      box-shadow: 0 0 18px rgba(214, 146, 255, 0.45);
+    }
+
     @media (max-width: 700px) {
       .centerpiece {
         width: 95vw;
@@ -359,10 +582,30 @@
       .voy-btn {
         padding: 14px 22px;
         font-size: 0.9rem;
+        width: 100%;
       }
 
-      .message h1 {
-        letter-spacing: 0.12em;
+      .gallery-box {
+        height: min(84vh, 640px);
+        border-radius: 24px;
+      }
+
+      .slide {
+        padding: 18px;
+      }
+
+      .photo-frame {
+        width: 100%;
+        height: min(74%, 390px);
+      }
+
+      .nav-wrap {
+        padding: 0 8px;
+      }
+
+      .nav-btn {
+        width: 44px;
+        height: 44px;
       }
     }
   </style>
@@ -377,7 +620,7 @@
       <div class="accretion-ring"></div>
       <div class="black-hole"></div>
       <div class="message" id="message">
-        <h1>⏁⟒ ⏃⋔⍜ ⎎⟟⌰⊑⏃</h1>
+        <h1>te amo filha</h1>
       </div>
     </div>
 
@@ -385,6 +628,27 @@
 
     <div class="controls">
       <button class="voy-btn" id="voyBtn">voy clica aqui</button>
+      <button class="voy-btn" id="galleryBtn">ver fotos da voy</button>
+    </div>
+  </div>
+
+  <!-- GALERIA -->
+  <div class="gallery-overlay" id="galleryOverlay">
+    <div class="gallery-bg" id="galleryBg"></div>
+
+    <div class="gallery-box">
+      <div class="gallery-top">
+        <div class="gallery-label">momentos da voy</div>
+        <button class="close-btn" id="closeGallery">fechar</button>
+      </div>
+
+      <div class="nav-wrap">
+        <button class="nav-btn" id="prevBtn">❮</button>
+        <button class="nav-btn" id="nextBtn">❯</button>
+      </div>
+
+      <div class="slides" id="slides"></div>
+      <div class="dots" id="dots"></div>
     </div>
   </div>
 
@@ -393,6 +657,57 @@
     const button = document.getElementById('voyBtn');
     const particles = document.getElementById('particles');
     const burst = document.getElementById('burst');
+
+    const galleryBtn = document.getElementById('galleryBtn');
+    const galleryOverlay = document.getElementById('galleryOverlay');
+    const closeGallery = document.getElementById('closeGallery');
+    const slidesWrap = document.getElementById('slides');
+    const dotsWrap = document.getElementById('dots');
+    const galleryBg = document.getElementById('galleryBg');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+
+    /* TROCA AQUI PELAS FOTOS E MENSAGENS */
+    const galleryImages = [
+      {
+        src: 'Tamo iguais.png',
+        title: 'INGUAISS!!!!',
+        text: 'Nesse Dia eu fiquei tão feliz quando você simplesmente me mostrou isso....'
+      },
+      {
+        src: 'Pidona.png',
+        title: 'PIDONA',
+        text: 'Eu não consigo negar NADA, quando você faz essa cara'
+      },
+      {
+        src: 'Eu roxo com a voy.png',
+        title: 'Roxos',
+        text: 'Até que a gente combina quando estamos da mesma cor né?'
+      },
+      {
+        src: 'Dormindos.png',
+        title: 'Fofos',
+        text: 'Pois é, nesse dia a gente tava brigado, mas quando você deitou do meu lado eu estava TÃO FELIZ'
+      },
+      {
+        src: 'NEVE.png',
+        title: 'NA NEVEE!!!!!',
+        text: 'Acredita que tipo msm tendo poucas, todas são especiais'
+      },
+      {
+        src: 'Na chuva.png',
+        title: 'Mesmo em situações dificeis',
+        text: 'Nesse dia tada tudo dando errado, a toshi aparecendo e tal... mas eu nn consigo olhar pra essa foto e nn imaginar o quanto você é linda'
+      },
+      {
+        src: 'Carinho.png',
+        title: 'É bizarro',
+        text: 'É bizarro o fato de que tudo fica melhor com minha filha'
+      }
+    ];
+
+    let currentIndex = 0;
+    let autoSlide;
 
     function createParticles(amount = 65) {
       particles.innerHTML = '';
@@ -430,6 +745,107 @@
     }
 
     button.addEventListener('click', triggerEffect);
+
+    function buildGallery() {
+      slidesWrap.innerHTML = '';
+      dotsWrap.innerHTML = '';
+      galleryBg.innerHTML = '';
+
+      galleryImages.forEach((item, index) => {
+        const slide = document.createElement('div');
+        slide.className = 'slide';
+        slide.innerHTML = `
+          <div class="photo-frame">
+            <img src="${item.src}" alt="Foto ${index + 1} da Voy">
+            <div class="caption">
+              <h2>${item.title}</h2>
+              <p>${item.text}</p>
+            </div>
+          </div>
+        `;
+        slidesWrap.appendChild(slide);
+
+        const bg = document.createElement('img');
+        bg.src = item.src;
+        bg.alt = '';
+        galleryBg.appendChild(bg);
+
+        const dot = document.createElement('button');
+        dot.className = 'dot';
+        dot.addEventListener('click', () => showSlide(index));
+        dotsWrap.appendChild(dot);
+      });
+
+      showSlide(0);
+    }
+
+    function showSlide(index) {
+      currentIndex = (index + galleryImages.length) % galleryImages.length;
+
+      const slides = document.querySelectorAll('.slide');
+      const dots = document.querySelectorAll('.dot');
+      const bgs = galleryBg.querySelectorAll('img');
+
+      slides.forEach((slide, i) => slide.classList.toggle('active', i === currentIndex));
+      dots.forEach((dot, i) => dot.classList.toggle('active', i === currentIndex));
+      bgs.forEach((bg, i) => bg.classList.toggle('active', i === currentIndex));
+    }
+
+    function nextSlide() {
+      showSlide(currentIndex + 1);
+    }
+
+    function prevSlide() {
+      showSlide(currentIndex - 1);
+    }
+
+    function startAutoSlide() {
+      clearInterval(autoSlide);
+      autoSlide = setInterval(nextSlide, 4200);
+    }
+
+    function openGallery() {
+      galleryOverlay.classList.add('show');
+      startAutoSlide();
+    }
+
+    function closeGalleryOverlay() {
+      galleryOverlay.classList.remove('show');
+      clearInterval(autoSlide);
+    }
+
+    galleryBtn.addEventListener('click', openGallery);
+    closeGallery.addEventListener('click', closeGalleryOverlay);
+
+    nextBtn.addEventListener('click', () => {
+      nextSlide();
+      startAutoSlide();
+    });
+
+    prevBtn.addEventListener('click', () => {
+      prevSlide();
+      startAutoSlide();
+    });
+
+    galleryOverlay.addEventListener('click', (e) => {
+      if (e.target === galleryOverlay) closeGalleryOverlay();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (!galleryOverlay.classList.contains('show')) return;
+
+      if (e.key === 'Escape') closeGalleryOverlay();
+      if (e.key === 'ArrowRight') {
+        nextSlide();
+        startAutoSlide();
+      }
+      if (e.key === 'ArrowLeft') {
+        prevSlide();
+        startAutoSlide();
+      }
+    });
+
+    buildGallery();
   </script>
 </body>
 </html>
