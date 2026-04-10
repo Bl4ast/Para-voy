@@ -178,7 +178,7 @@
       gap: 12px;
       flex-wrap: wrap;
       justify-content: center;
-      width: min(92vw, 800px);
+      width: min(94vw, 1000px);
     }
 
     .voy-btn {
@@ -350,8 +350,8 @@
       }
     }
 
-    /* GALERIA */
-    .gallery-overlay {
+    .gallery-overlay,
+    .missions-overlay {
       position: fixed;
       inset: 0;
       background:
@@ -364,7 +364,8 @@
       transition: opacity 0.6s ease;
     }
 
-    .gallery-overlay.show {
+    .gallery-overlay.show,
+    .missions-overlay.show {
       opacity: 1;
       pointer-events: auto;
     }
@@ -392,13 +393,13 @@
       transform: scale(1.2);
     }
 
-    .gallery-box {
+    .gallery-box,
+    .missions-box {
       position: absolute;
       left: 50%;
       top: 50%;
       transform: translate(-50%, -50%);
       width: min(92vw, 900px);
-      height: min(80vh, 620px);
       border-radius: 30px;
       border: 1px solid rgba(255,255,255,0.12);
       background: rgba(255,255,255,0.06);
@@ -407,7 +408,19 @@
       backdrop-filter: blur(18px);
     }
 
-    .gallery-top {
+    .gallery-box {
+      height: min(80vh, 620px);
+    }
+
+    .missions-box {
+      width: min(94vw, 1100px);
+      height: min(86vh, 760px);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .gallery-top,
+    .missions-top {
       position: absolute;
       top: 0;
       left: 0;
@@ -419,7 +432,13 @@
       padding: 18px 20px;
     }
 
-    .gallery-label {
+    .missions-top {
+      position: relative;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .gallery-label,
+    .missions-title {
       padding: 10px 16px;
       border-radius: 999px;
       background: rgba(255,255,255,0.08);
@@ -574,6 +593,194 @@
       box-shadow: 0 0 18px rgba(214, 146, 255, 0.45);
     }
 
+    .missions-search {
+      display: grid;
+      grid-template-columns: 1fr 220px;
+      gap: 14px;
+      padding: 18px 20px;
+    }
+
+    .missions-search input {
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.06);
+      color: white;
+      outline: none;
+      font-size: 0.95rem;
+    }
+
+    .missions-search input::placeholder {
+      color: rgba(255,255,255,0.45);
+    }
+
+    .missions-list {
+      flex: 1;
+      overflow: auto;
+      padding: 0 20px 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 18px;
+    }
+
+    .mission-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 0 28px rgba(160, 76, 255, 0.10);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      cursor: pointer;
+    }
+
+    .mission-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 0 34px rgba(181, 108, 255, 0.22);
+    }
+
+    .mission-card img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+
+    .mission-card:hover img {
+      transform: scale(1.04);
+    }
+
+    .mission-info {
+      padding: 16px;
+    }
+
+    .mission-date {
+      display: inline-block;
+      margin-bottom: 10px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(181, 108, 255, 0.12);
+      border: 1px solid rgba(255,255,255,0.10);
+      color: #e8c8ff;
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+    }
+
+    .mission-info h3 {
+      font-size: 1.1rem;
+      color: #f7e6ff;
+      margin-bottom: 8px;
+      line-height: 1.35;
+      word-break: break-word;
+    }
+
+    .mission-info p {
+      color: rgba(244, 225, 255, 0.82);
+      font-size: 0.92rem;
+      line-height: 1.5;
+      word-break: break-word;
+    }
+
+    .no-results {
+      grid-column: 1 / -1;
+      text-align: center;
+      color: rgba(255,255,255,0.68);
+      padding: 40px 20px;
+      font-size: 1rem;
+    }
+
+    .mission-viewer {
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(circle at center, rgba(123, 44, 255, 0.22), rgba(5, 1, 13, 0.95) 60%),
+        linear-gradient(180deg, rgba(18, 3, 33, 0.92), rgba(5, 1, 13, 0.98));
+      backdrop-filter: blur(14px);
+      z-index: 80;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.35s ease;
+    }
+
+    .mission-viewer.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .mission-viewer-box {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%) scale(0.94);
+      width: min(92vw, 900px);
+      max-height: 88vh;
+      overflow: auto;
+      border-radius: 28px;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow: 0 20px 80px rgba(0,0,0,0.5), 0 0 60px rgba(171, 86, 255, 0.2);
+      backdrop-filter: blur(18px);
+      transition: transform 0.35s ease;
+    }
+
+    .mission-viewer.show .mission-viewer-box {
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    .mission-viewer-close {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      z-index: 3;
+    }
+
+    .mission-viewer-image-wrap {
+      width: 100%;
+      height: min(58vh, 520px);
+      overflow: hidden;
+      border-radius: 28px 28px 0 0;
+    }
+
+    .mission-viewer-image-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      animation: missionZoom 0.7s ease;
+    }
+
+    .mission-viewer-content {
+      padding: 24px;
+    }
+
+    .mission-viewer-content h2 {
+      font-size: clamp(1.6rem, 3vw, 2.5rem);
+      color: #f7e6ff;
+      margin: 14px 0 10px;
+      line-height: 1.2;
+      text-shadow: 0 0 18px rgba(213, 153, 255, 0.25);
+      word-break: break-word;
+    }
+
+    .mission-viewer-content p {
+      color: rgba(244, 225, 255, 0.86);
+      font-size: 1rem;
+      line-height: 1.7;
+      word-break: break-word;
+    }
+
+    @keyframes missionZoom {
+      from {
+        transform: scale(1.08);
+        opacity: 0.5;
+      }
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
     @media (max-width: 700px) {
       .centerpiece {
         width: 95vw;
@@ -588,6 +795,12 @@
       .gallery-box {
         height: min(84vh, 640px);
         border-radius: 24px;
+      }
+
+      .missions-box {
+        width: min(96vw, 1100px);
+        height: min(88vh, 760px);
+        border-radius: 22px;
       }
 
       .slide {
@@ -606,6 +819,18 @@
       .nav-btn {
         width: 44px;
         height: 44px;
+      }
+
+      .missions-search {
+        grid-template-columns: 1fr;
+      }
+
+      .mission-card img {
+        height: 190px;
+      }
+
+      .mission-viewer-image-wrap {
+        height: 300px;
       }
     }
   </style>
@@ -629,10 +854,10 @@
     <div class="controls">
       <button class="voy-btn" id="voyBtn">voy clica aqui</button>
       <button class="voy-btn" id="galleryBtn">ver fotos da voy</button>
+      <button class="voy-btn" id="missionsBtn">missões da voy</button>
     </div>
   </div>
 
-  <!-- GALERIA -->
   <div class="gallery-overlay" id="galleryOverlay">
     <div class="gallery-bg" id="galleryBg"></div>
 
@@ -652,6 +877,38 @@
     </div>
   </div>
 
+  <div class="missions-overlay" id="missionsOverlay">
+    <div class="missions-box">
+      <div class="missions-top">
+        <div class="missions-title">missões da voy</div>
+        <button class="close-btn" id="closeMissions">fechar</button>
+      </div>
+
+      <div class="missions-search">
+        <input type="text" id="searchTitle" placeholder="procurar por título..." />
+        <input type="date" id="searchDate" />
+      </div>
+
+      <div class="missions-list" id="missionsList"></div>
+    </div>
+  </div>
+
+  <div class="mission-viewer" id="missionViewer">
+    <div class="mission-viewer-box">
+      <button class="close-btn mission-viewer-close" id="closeMissionViewer">fechar</button>
+
+      <div class="mission-viewer-image-wrap">
+        <img id="missionViewerImage" src="" alt="">
+      </div>
+
+      <div class="mission-viewer-content">
+        <span class="mission-date" id="missionViewerDate"></span>
+        <h2 id="missionViewerTitle"></h2>
+        <p id="missionViewerText"></p>
+      </div>
+    </div>
+  </div>
+
   <script>
     const universe = document.getElementById('universe');
     const button = document.getElementById('voyBtn');
@@ -667,7 +924,22 @@
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
 
-    /* TROCA AQUI PELAS FOTOS E MENSAGENS */
+    const missionsBtn = document.getElementById('missionsBtn');
+    const missionsOverlay = document.getElementById('missionsOverlay');
+    const closeMissions = document.getElementById('closeMissions');
+    const missionsList = document.getElementById('missionsList');
+    const searchTitle = document.getElementById('searchTitle');
+    const searchDate = document.getElementById('searchDate');
+
+    const missionViewer = document.getElementById('missionViewer');
+    const closeMissionViewer = document.getElementById('closeMissionViewer');
+    const missionViewerImage = document.getElementById('missionViewerImage');
+    const missionViewerDate = document.getElementById('missionViewerDate');
+    const missionViewerTitle = document.getElementById('missionViewerTitle');
+    const missionViewerText = document.getElementById('missionViewerText');
+
+
+    //missões
     const galleryImages = [
       {
         src: 'Tamo iguais.png',
@@ -704,6 +976,40 @@
         title: 'É bizarro',
         text: 'É bizarro o fato de que tudo fica melhor com minha filha'
       }
+    ];
+
+    // missões
+    const voyMissions = [
+      {
+        src: 'Ouvindo Filme.png',
+        title: 'Ouvindo Crepusculo',
+        date: '2026-04-02',
+        text: 'Nem eu acreditei que eu escutei TRINTA MINUTOS disso.....'
+      },
+      {
+        src: 'Foto com Orca.png',
+        title: 'Fotinha com ORCA!!',
+        date: '2026-04-01',
+        text: ''
+      },
+      {
+        src: 'Treino.png',
+        title: 'Treinando magia fora de seu domínio.',
+        date: '2026-04-02',
+        text: ''
+      },
+      {
+        src: 'Pintando.png',
+        title: 'Desenhando!!',
+        date: '2026-04-02',
+        text: ''
+      },
+      {
+        src: 'Buraco Negro.png',
+        title: 'CONSTRUINDO!!!',
+        date: '2026-04-02',
+        text: ''
+      },
     ];
 
     let currentIndex = 0;
@@ -831,21 +1137,107 @@
       if (e.target === galleryOverlay) closeGalleryOverlay();
     });
 
-    document.addEventListener('keydown', (e) => {
-      if (!galleryOverlay.classList.contains('show')) return;
+    function renderMissions(list) {
+      missionsList.innerHTML = '';
 
-      if (e.key === 'Escape') closeGalleryOverlay();
-      if (e.key === 'ArrowRight') {
-        nextSlide();
-        startAutoSlide();
+      if (!list.length) {
+        missionsList.innerHTML = '<div class="no-results">nenhuma missão encontrada.</div>';
+        return;
       }
-      if (e.key === 'ArrowLeft') {
-        prevSlide();
-        startAutoSlide();
+
+      list.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'mission-card';
+        card.innerHTML = `
+          <img src="${item.src}" alt="${item.title}">
+          <div class="mission-info">
+            <span class="mission-date">${item.date}</span>
+            <h3>${item.title}</h3>
+            <p>${item.text}</p>
+          </div>
+        `;
+
+        card.addEventListener('click', () => openMissionViewer(item));
+        missionsList.appendChild(card);
+      });
+    }
+
+    function filterMissions() {
+      const titleValue = searchTitle.value.toLowerCase().trim();
+      const dateValue = searchDate.value;
+
+      const filtered = voyMissions.filter(item => {
+        const matchesTitle = item.title.toLowerCase().includes(titleValue);
+        const matchesDate = !dateValue || item.date === dateValue;
+        return matchesTitle && matchesDate;
+      });
+
+      renderMissions(filtered);
+    }
+
+    function openMissions() {
+      missionsOverlay.classList.add('show');
+      filterMissions();
+    }
+
+    function closeMissionsOverlay() {
+      missionsOverlay.classList.remove('show');
+    }
+
+    function openMissionViewer(item) {
+      missionViewerImage.src = item.src;
+      missionViewerImage.alt = item.title;
+      missionViewerDate.textContent = item.date;
+      missionViewerTitle.textContent = item.title;
+      missionViewerText.textContent = item.text;
+      missionViewer.classList.add('show');
+    }
+
+    function closeMissionViewerOverlay() {
+      missionViewer.classList.remove('show');
+    }
+
+    missionsBtn.addEventListener('click', openMissions);
+    closeMissions.addEventListener('click', closeMissionsOverlay);
+    searchTitle.addEventListener('input', filterMissions);
+    searchDate.addEventListener('input', filterMissions);
+
+    missionsOverlay.addEventListener('click', (e) => {
+      if (e.target === missionsOverlay) closeMissionsOverlay();
+    });
+
+    closeMissionViewer.addEventListener('click', closeMissionViewerOverlay);
+
+    missionViewer.addEventListener('click', (e) => {
+      if (e.target === missionViewer) closeMissionViewerOverlay();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (galleryOverlay.classList.contains('show')) {
+        if (e.key === 'Escape') closeGalleryOverlay();
+        if (e.key === 'ArrowRight') {
+          nextSlide();
+          startAutoSlide();
+        }
+        if (e.key === 'ArrowLeft') {
+          prevSlide();
+          startAutoSlide();
+        }
+      }
+
+      if (missionsOverlay.classList.contains('show') && e.key === 'Escape') {
+        closeMissionsOverlay();
+      }
+
+      if (missionViewer.classList.contains('show') && e.key === 'Escape') {
+        closeMissionViewerOverlay();
       }
     });
 
     buildGallery();
+    renderMissions(voyMissions);
   </script>
 </body>
 </html>
+
+// Nota (Mudar o Buraco Negro)
